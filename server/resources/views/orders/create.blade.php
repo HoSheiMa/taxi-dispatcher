@@ -24,7 +24,7 @@
                     <div class="form-group row  mb-5">
                         <label for="text" class="col-4 col-form-label">Phone</label>
                         <div class="col-8">
-                            <input id="text" name="phone" placeholder="Username" type="text" class="form-control" required="required">
+                            <input id="text" name="phone" placeholder="Phone" type="text" class="form-control" required="required">
                         </div>
 
                         @if ($errors->has('phone'))
