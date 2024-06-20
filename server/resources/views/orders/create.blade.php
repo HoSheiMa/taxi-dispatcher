@@ -144,7 +144,7 @@
                     params.page = params.page || 1;
                     let response = {
                         results: features.map((feature) => ({
-                            "id": `${feature.geometry.coordinates[0]},${feature.geometry.coordinates[1]}`,
+                            "id": `${feature.geometry.coordinates[1]},${feature.geometry.coordinates[0]}`,
                             'text': feature.properties.formatted
                         })),
                         pagination: {
@@ -192,7 +192,7 @@
                     params.page = params.page || 1;
                     let response = {
                         results: features.map((feature) => ({
-                            "id": `${feature.geometry.coordinates[0]},${feature.geometry.coordinates[1]}`,
+                            "id": `${feature.geometry.coordinates[1]},${feature.geometry.coordinates[0]}`,
                             'text': feature.properties.formatted
                         })),
                         pagination: {
