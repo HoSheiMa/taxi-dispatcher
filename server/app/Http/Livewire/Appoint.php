@@ -35,22 +35,16 @@ class Appoint extends Component
             return $appoint;
         }
     }
-    protected function codexworldGetDistanceOpt($lat1, $lon1, $lat2, $lon2, $unit = "K")
+    protected function codexworldGetDistanceOpt($lat1, $lng1, $lat2, $lng2, $radius = 6378137)
     {
-        $theta = $lon1 - $lon2;
-        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-        $dist = acos($dist);
-        $dist = rad2deg($dist);
-        $miles = $dist * 60 * 1.1515;
-        $unit = strtoupper($unit);
+        static $x = M_PI / 180;
+        $lat1 *= $x;
+        $lng1 *= $x;
+        $lat2 *= $x;
+        $lng2 *= $x;
+        $distance = 2 * asin(sqrt(pow(sin(($lat1 - $lat2) / 2), 2) + cos($lat1) * cos($lat2) * pow(sin(($lng1 - $lng2) / 2), 2)));
 
-        if ($unit == "K") {
-            return ($miles * 1.609344);
-        } else if ($unit == "N") {
-            return ($miles * 0.8684);
-        } else {
-            return $miles;
-        }
+        return ($distance * $radius) / 1000;
     }
     public function addNearLocation($users)
     {
