@@ -1,4 +1,4 @@
-package com.anonymous.IslamicMeetingApp
+package com.anonymous.Taxi
 
 import android.os.Build
 import android.os.Bundle

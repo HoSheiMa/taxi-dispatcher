@@ -39,6 +39,10 @@ export default function (props) {
       Audio.Sound.createAsync(
         require("../../assets/sounds/uber_tune.mp3")
       ).then(async ({ sound }) => {
+        if (soundPlayer) {
+          soundPlayer.stopAsync();
+          soundPlayer.unloadAsync();
+        }
         await sound.setIsLoopingAsync(true);
         await sound.playAsync();
         setSoundPlayer(sound);
@@ -49,6 +53,7 @@ export default function (props) {
   useEffect(() => {
     return soundPlayer
       ? () => {
+          soundPlayer.stopAsync();
           soundPlayer.unloadAsync();
         }
       : undefined;
@@ -83,10 +88,15 @@ export default function (props) {
           stopSound();
         }
       });
-      setTimeout(timer, 1000);
     };
-    setTimeout(timer, 1000);
-    return () => window.clearInterval(timer);
+    var t = setInterval(timer, 1000);
+    return () => {
+      if (soundPlayer) {
+        soundPlayer.stopAsync();
+        soundPlayer.unloadAsync();
+      }
+      window.clearInterval(t);
+    };
   }, []);
 
   function accept(appoint_id) {

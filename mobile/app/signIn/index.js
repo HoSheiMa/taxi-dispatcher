@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Formik } from "formik";
 import { Button, TextInput } from "react-native-paper";
-import { FullHeight, PureWhite } from "../../class/helper/Theme";
+import { Danger, FullHeight, PureWhite } from "../../class/helper/Theme";
 import { ScrollView } from "react-native";
 import { supabase } from "../../class/utils/supabase";
 import { useContext, useEffect, useState } from "react";
@@ -23,8 +23,10 @@ export default function Page() {
             />
             <Formik
               initialValues={{
-                email: "driver@admin.com",
-                password: "driver@admin.com",
+                // email: "driver@admin.com",
+                // password: "driver@admin.com",
+                email: "",
+                password: "",
               }}
               onSubmit={async ({ email, password }) => {
                 // console.log("Login with", email);
@@ -66,14 +68,19 @@ export default function Page() {
                   >
                     Login
                   </Button>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      alignContent: "center",
-                      alignItems: "center",
-                    }}
-                  ></View>
+                  {error ? (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        alignItems: "center",
+                        marginTop: 10,
+                      }}
+                    >
+                      <Text style={{ color: Danger }}>{error}</Text>
+                    </View>
+                  ) : null}
                 </View>
               )}
             </Formik>

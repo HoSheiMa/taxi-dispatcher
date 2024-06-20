@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\OrderAutoAppoint;
 use App\Models\Appoint;
 use App\Models\Order;
 use App\Models\User;
@@ -10,7 +11,6 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public $max_await_time_in_seconds = 10;
 
     /**
      * Display a listing of the resource.
@@ -77,6 +77,29 @@ class UserController extends Controller
     public function updateStatus(Request $request, Order $order, $status)
     {
         if (auth('api')->user()->getAuthIdentifier() == $order->appoint_to_user) {
+            switch ($status) {
+                case 'cancelled':
+                    $status = "open";
+                    $order->update([
+                        'appoint_to_user' => null,
+                    ]);
+                    Appoint::where('order_id', $order->id)->delete();
+                    OrderAutoAppoint::dispatch($order);
+                    User::find(auth('api')->user()->getAuthIdentifier())->update([
+                        'appoint_to_order' => null,
+                        'is_available' => true
+                    ]);
+                    break;
+                case 'delivered':
+                    User::find(auth('api')->user()->getAuthIdentifier())->update([
+                        'appoint_to_order' => null,
+                        'is_available' => true
+                    ]);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
             $order->update([
                 'status' => $status
             ]);
@@ -87,7 +110,7 @@ class UserController extends Controller
 
     public function appoint(Appoint $appoint)
     {
-        if ($appoint->created_at->diffInRealSeconds(now(), false) <= $this->max_await_time_in_seconds && $appoint->status == "await") {
+        if ($appoint->created_at->diffInRealSeconds(now(), false) <= env('max_await_time_in_seconds') && $appoint->status == "await") {
             auth('api')->user()->appoint($appoint);
             return [
                 'message' => "You are winner of order."
@@ -124,7 +147,7 @@ class UserController extends Controller
 
         // ? filter out dated appoints (10 seconds)
         $appoints->filter(function ($appoint) {
-            if ($appoint->created_at->diffInRealSeconds(now(), false) <= $this->max_await_time_in_seconds && $appoint->status == "await") return true;
+            if ($appoint->created_at->diffInRealSeconds(now(), false) <=  env('max_await_time_in_seconds') && $appoint->status == "await") return true;
             $appoint->update(['status' => "refuse"]);
             return false;
         });

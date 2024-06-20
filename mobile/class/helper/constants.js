@@ -5,7 +5,10 @@ const DRIVER = "driver";
 const ADMIN = "admin";
 
 // api
+// let URL = "https://taxibonjour.ca";
 let URL = "http://10.0.2.2:8000";
+
+console.log("URL", URL);
 const LOGIN = `${URL}/api/auth/login`;
 const LOGOUT = `${URL}/api/auth/logout`;
 const ME = `${URL}/api/auth/me`;
@@ -15,7 +18,7 @@ const UPDATE_ORDER_STATUS = (order, status) =>
   `${URL}/api/order/${order}/status/${status}`;
 
 const APPOINT = (appoint_id) => `${URL}/api/order/appointment/${appoint_id}`;
-const maxAwaitTimeInSeconds = 10;
+const maxAwaitTimeInSeconds = 20;
 export {
   DRIVER,
   ADMIN,

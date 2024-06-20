@@ -20,11 +20,7 @@ export default function App() {
 
   // redirect to home or signin depend on status
   // loading feedback
-  return (
-    <View>
-      <Text>LOADING</Text>
-    </View>
-  );
+  return <View></View>;
 }
 
 const styles = StyleSheet.create({

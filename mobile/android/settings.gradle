@@ -1,4 +1,4 @@
-rootProject.name = 'IslamicMeetingApp'
+rootProject.name = 'Taxi'
 
 dependencyResolutionManagement {
   versionCatalogs {

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('phone');
             $table->enum('status', ['open', 'await', 'accepted', 'delivering', 'delivered', 'cancelled']);
             $table->enum('payment_type', ['cash', 'card']);
             $table->string('start_location');

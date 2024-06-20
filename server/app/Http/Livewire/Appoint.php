@@ -12,7 +12,6 @@ class Appoint extends Component
     public $status;
     public $appoint_at;
     public $appoint_to_user_id;
-    public $max_await_time_in_seconds = 10;
     public function appoint($user)
     {
         $user = User::find($user);
@@ -24,7 +23,7 @@ class Appoint extends Component
                 'user_id' => $user->id,
                 'status' => "refuse",
             ])->delete();
-            AppointModel::create([
+            $appoint = AppointModel::create([
                 'order_id' =>  $this->order->id,
                 'user_id' => $user->id,
                 'status' => "await",
@@ -33,6 +32,7 @@ class Appoint extends Component
             $this->status = "await";
             $this->appoint_at = $now;
             $this->appoint_to_user_id = $user->id;
+            return $appoint;
         }
     }
     protected function codexworldGetDistanceOpt($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
@@ -46,7 +46,7 @@ class Appoint extends Component
 
         return acos($dist) / $rad * 60 *  1.853;
     }
-    protected function addNearLocation($users)
+    public function addNearLocation($users)
     {
         // add near to start location in KM
         foreach ($users as $index => $user) {
@@ -68,7 +68,11 @@ class Appoint extends Component
     }
     public function render()
     {
-        $users = User::where(['is_available' => 'true', "role" => "driver"])->OrWhere("appoint_to_order", null)->OrWhere('appoint_to_order', $this->order->id)->get();
+        $users = User::where(['is_available' => 'true', "role" => "driver"])
+            ->where(function ($query) {
+                $query->whereNull('appoint_to_order')
+                    ->orWhere('appoint_to_order', $this->order->id);
+            })->get();
         $users = $this->addNearLocation($users);
         $appoints = AppointModel::where('order_id', $this->order->id)->whereIn('status', ['await', 'accepted'])->get();
         if (sizeof($appoints) == 0) {
@@ -84,7 +88,9 @@ class Appoint extends Component
                     $this->appoint_to_user_id = $appoint->user_id;
                     return;
                 }
-                if ($appoint->created_at->diffInSeconds() > $this->max_await_time_in_seconds) {
+
+
+                if ($appoint->created_at->diffInSeconds() > env('max_await_time_in_seconds')) {
                     $this->status = "open";
                     $this->appoint_to_user_id = null;
                     $this->appoint_at = null;

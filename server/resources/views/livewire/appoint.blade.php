@@ -35,7 +35,7 @@
                                     @if ($appoint_to_user_id == $user->id)
                                         <button wire:click='appoint({{ $user->id }})' class="btn btn-success" disabled data-kt-indicator="on">
                                             <span class="indicator-progress">
-                                                Wait accept from driver ( remain {{ $max_await_time_in_seconds - $appoint_at->diffInSeconds() }} seconds) <span
+                                                Wait accept from driver ( remain {{ env('max_await_time_in_seconds') - $appoint_at->diffInSeconds() }} seconds) <span
                                                     class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                             </span></button>
                                     @else

@@ -22,6 +22,16 @@
                         @endif
                     </div>
                     <div class="form-group row  mb-5">
+                        <label for="text" class="col-4 col-form-label">Phone</label>
+                        <div class="col-8">
+                            <input id="text" name="phone" placeholder="Username" type="text" class="form-control" required="required">
+                        </div>
+
+                        @if ($errors->has('phone'))
+                            <div class="error text-danger">{{ $errors->first('phone') }}</div>
+                        @endif
+                    </div>
+                    <div class="form-group row  mb-5">
                         <label for="text1" class="col-4 col-form-label">Start Location</label>
                         <div class="col-8">
                             <select name="start_location" placeholder="Start Location" class="start_location form-select" required="required"></select>
@@ -34,7 +44,7 @@
                     <div class="form-group row  mb-5">
                         <label for="text2" class="col-4 col-form-label">End Location</label>
                         <div class="col-8">
-                            <select name="end_location" placeholder="End Location" class="end_location form-select" required="required"></select>
+                            <select name="end_location" placeholder="End Location" class="end_location form-select"></select>
                         </div>
 
                         @if ($errors->has('end_location'))
@@ -42,9 +52,8 @@
                         @endif
                     </div>
                     <div class="form-group row  mb-5">
-                        <label for="select" class="col-4 col-form-label">Start Location (lat,long)</label>
                         <div class="col-8">
-                            <input id="text2" name="start_location_lat_long" placeholder="Start Location (lat,long)" type="text" class="form-control" required="required">
+                            <input id="text2" name="start_location_lat_long" placeholder="Start Location (lat,long)" type="hidden" class="form-control" required="required">
                         </div>
 
                         @if ($errors->has('start_location_lat_long'))
@@ -53,9 +62,8 @@
                     </div>
 
                     <div class="form-group row  mb-5">
-                        <label for="select" class="col-4 col-form-label">End Location (lat,long)</label>
                         <div class="col-8">
-                            <input id="text2" name="end_location_lat_long" placeholder="End Location (lat,long)" type="text" class="form-control" required="required">
+                            <input id="text2" name="end_location_lat_long" placeholder="End Location (lat,long)" type="hidden" class="form-control">
                         </div>
 
                         @if ($errors->has('end_location_lat_long'))

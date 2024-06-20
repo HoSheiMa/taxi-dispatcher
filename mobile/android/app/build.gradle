@@ -83,9 +83,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.anonymous.IslamicMeetingApp'
+    namespace 'com.anonymous.Taxi'
     defaultConfig {
-        applicationId 'com.anonymous.IslamicMeetingApp'
+        applicationId 'com.anonymous.Taxi'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

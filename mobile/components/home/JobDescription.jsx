@@ -1,4 +1,12 @@
-import { View, Text, ScrollView, StyleSheet, Linking } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Linking,
+  Platform,
+  TouchableOpacity,
+} from "react-native";
 import Auth from "../../class/api/auth";
 import { PureComponent, useEffect, useState } from "react";
 import { Button, Surface } from "react-native-paper";
@@ -46,9 +54,25 @@ export default function () {
     new Auth().updateOrderStatus(order.id, "delivered");
   }
   function openOrderLocation() {
-    Linking.openURL(
-      `https://www.google.es/maps/dir/'${order.start_location_lat_long}'/'${order.end_location_lat_long}'`
-    );
+    // Linking.openURL(
+    //   `https://www.google.es/maps/dir/'${order.start_location_lat_long}'` +
+    //     (order.end_location_lat_long
+    //       ? `/'${order.end_location_lat_long}'`
+    //       : "/''")
+    // );
+
+    const scheme = Platform.select({
+      ios: "maps://0,0?q=",
+      android: "geo:0,0?q=",
+    });
+    const latLng = `${order.start_location_lat_long}`;
+    const label = "Start Location";
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+
+    Linking.openURL(url);
   }
   function cancelOrder(confirm = false) {
     if (confirm) {
@@ -66,7 +90,12 @@ export default function () {
       </Text>
 
       <View style={styles.wrapper}>
-        <View style={styles.box}>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => {
+            Linking.openURL(`tel:${order.phone}`);
+          }}
+        >
           <Surface style={styles.surface} elevation={2}>
             <View style={{ flex: 1 }}>
               <Icon source="file-account" color={Black} size={26} />
@@ -76,20 +105,23 @@ export default function () {
               <Text style={{ textTransform: "uppercase" }}>{order.name}</Text>
             </View>
           </Surface>
-        </View>
-        <View style={styles.box}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.box}
+          onPress={() => {
+            Linking.openURL(`tel:${order.phone}`);
+          }}
+        >
           <Surface style={styles.surface} elevation={2}>
             <View style={{ flex: 1 }}>
-              <Icon source="credit-card-outline" color={Black} size={26} />
+              <Icon source="file-account" color={Black} size={26} />
             </View>
             <View style={{ flex: 3 }}>
-              <Text style={{ fontWeight: "bold" }}>PAYMENT TYPE</Text>
-              <Text style={{ textTransform: "uppercase" }}>
-                {order.payment_type}
-              </Text>
+              <Text style={{ fontWeight: "bold" }}>PHONE</Text>
+              <Text style={{ textTransform: "uppercase" }}>{order.phone}</Text>
             </View>
           </Surface>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.wrapper}>
         <View style={styles.box}>
@@ -142,6 +174,21 @@ export default function () {
               <Text style={{ fontWeight: "bold" }}>START AT</Text>
               <Text style={{ textTransform: "uppercase" }}>
                 {moment(order.start_at).fromNow()}
+              </Text>
+            </View>
+          </Surface>
+        </View>
+      </View>
+      <View style={styles.wrapper}>
+        <View style={styles.box}>
+          <Surface style={styles.surface} elevation={2}>
+            <View style={{ flex: 1 }}>
+              <Icon source="credit-card-outline" color={Black} size={26} />
+            </View>
+            <View style={{ flex: 3 }}>
+              <Text style={{ fontWeight: "bold" }}>PAYMENT TYPE</Text>
+              <Text style={{ textTransform: "uppercase" }}>
+                {order.payment_type}
               </Text>
             </View>
           </Surface>

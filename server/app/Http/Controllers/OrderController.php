@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\OrderAutoAppoint;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,15 +50,17 @@ class OrderController extends Controller
         // dd($request->all());
         $form = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
             'payment_type' => ['required', 'string',  Rule::in(['cash', 'card'])],
             'start_location' => ['required', 'string'],
-            'end_location' => ['required', 'string'],
+            'end_location' => ['nullable', 'string'],
             'start_location_lat_long' => ['required', 'string'],
-            'end_location_lat_long' => ['required', 'string'],
+            'end_location_lat_long' => ['nullable', 'string'],
             'start_at' => ['required', 'date', 'string'],
         ]);
-        $user = Order::create($form);
-        return back()->with('success', 'Created Successfully')->with('user', $user);
+        $order = Order::create($form);
+        OrderAutoAppoint::dispatch($order);
+        return back()->with('success', 'Created Successfully')->with('order', $order);
     }
 
     /**

@@ -191,6 +191,7 @@ export default class Auth {
       (response.error && !response.access_token) ||
       response.message == "Unauthenticated."
     ) {
+      console.log("Unauthenticated");
       return false;
     }
     // save fresh token

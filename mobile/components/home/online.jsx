@@ -68,8 +68,6 @@ export default function () {
     <View
       style={{
         alignItems: "center",
-        marginTop: 12,
-        marginBottom: 12,
       }}
     >
       {error ? (
