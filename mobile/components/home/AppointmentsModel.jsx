@@ -35,7 +35,8 @@ export default function (props) {
   }
   async function playSound() {
     setSoundPlayerStatus((oldSoundPlayerStatus) => {
-      if (oldSoundPlayerStatus == true) return;
+      console.log("oldSoundPlayerStatus", oldSoundPlayerStatus);
+      if (oldSoundPlayerStatus == true) return true;
       Audio.Sound.createAsync(
         require("../../assets/sounds/uber_tune.mp3")
       ).then(async ({ sound }) => {
@@ -53,6 +54,8 @@ export default function (props) {
   useEffect(() => {
     return soundPlayer
       ? () => {
+          console.log("cancel", soundPlayer);
+
           soundPlayer.stopAsync();
           soundPlayer.unloadAsync();
         }

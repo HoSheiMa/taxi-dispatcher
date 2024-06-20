@@ -5,8 +5,8 @@ const DRIVER = "driver";
 const ADMIN = "admin";
 
 // api
-let URL = "https://taxibonjour.ca";
-// let URL = "http://10.0.2.2:8000";
+// let URL = "https://taxibonjour.ca";\
+let URL = "http://10.0.2.2:8000";
 
 console.log("URL", URL);
 const LOGIN = `${URL}/api/auth/login`;
